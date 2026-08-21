@@ -17,17 +17,19 @@ export function HeroBanner({ onSelectCategory, onSelectGame }) {
   const [isPlayingTrailer, setIsPlayingTrailer] = useState(false);
 
   return (
-    <section style={{ padding: '1.75rem 0 1rem 0', position: 'relative' }}>
+    <section style={{ padding: '1.25rem 0 1rem 0', position: 'relative', width: '100%', boxSizing: 'border-box' }}>
       <div className="app-container">
         
         {/* Main Hero Liquid Glass Card */}
         <div 
           className="glass-panel" 
           style={{ 
-            padding: '2.5rem 2rem', 
+            padding: 'clamp(1.25rem, 3vw, 2.25rem) clamp(1rem, 2.5vw, 2rem)', 
             borderRadius: 'var(--radius-lg)',
             position: 'relative',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            width: '100%',
+            boxSizing: 'border-box'
           }}
         >
           <div 
@@ -42,29 +44,29 @@ export function HeroBanner({ onSelectCategory, onSelectGame }) {
             }}
           />
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem', alignItems: 'center', position: 'relative', zIndex: 2 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '1.5rem', alignItems: 'center', position: 'relative', zIndex: 2, width: '100%', boxSizing: 'border-box' }}>
             
             {/* Left Column */}
-            <div>
+            <div style={{ width: '100%', boxSizing: 'border-box' }}>
               
               <div 
                 className="glass-badge" 
-                style={{ marginBottom: '1rem', padding: '0.25rem 0.65rem' }}
+                style={{ marginBottom: '0.85rem', padding: '0.25rem 0.65rem' }}
               >
                 <ShieldCheck size={13} color="currentColor" />
                 <span>Verified Gaming Marketplace</span>
               </div>
 
-              <h1 style={{ fontSize: 'clamp(1.85rem, 4vw, 2.85rem)', fontWeight: 800, lineHeight: 1.15, marginBottom: '0.85rem', letterSpacing: '-0.02em' }}>
+              <h1 style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.75rem)', fontWeight: 800, lineHeight: 1.18, marginBottom: '0.85rem', letterSpacing: '-0.02em' }}>
                 Level Up Your Game with <span className="serif-subheading" style={{ color: 'var(--accent-primary)', fontWeight: 400 }}>Verified</span> Accounts & Currency
               </h1>
 
-              <p className="serif-subheading" style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '1.5rem', maxWidth: '520px' }}>
+              <p className="serif-subheading" style={{ fontSize: 'clamp(0.95rem, 2vw, 1.1rem)', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '1.25rem', maxWidth: '520px' }}>
                 Full gameplay video verification, instant transfer warranty, and direct escrow contact via WhatsApp with our 3 verified representatives.
               </p>
 
               {/* Action Buttons */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem', marginBottom: '1.25rem' }}>
                 <GlassButton
                   variant="primary"
                   size="md"
@@ -112,12 +114,14 @@ export function HeroBanner({ onSelectCategory, onSelectGame }) {
 
             {/* Right Column: Media Showcase */}
             {featuredProduct && (
-              <div style={{ width: '100%', maxWidth: '440px', justifySelf: 'center' }}>
+              <div style={{ width: '100%', maxWidth: '440px', justifySelf: 'center', boxSizing: 'border-box' }}>
                 <div 
                   className="glass-card"
                   style={{
-                    padding: '1.25rem',
-                    border: '1px solid var(--glass-border)'
+                    padding: '1.15rem',
+                    border: '1px solid var(--glass-border)',
+                    width: '100%',
+                    boxSizing: 'border-box'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
@@ -135,9 +139,10 @@ export function HeroBanner({ onSelectCategory, onSelectGame }) {
                       position: 'relative', 
                       borderRadius: 'var(--radius-sm)', 
                       overflow: 'hidden', 
-                      height: '190px', 
+                      height: '180px', 
                       marginBottom: '0.85rem',
-                      background: '#000'
+                      background: '#000',
+                      width: '100%'
                     }}
                   >
                     {!isPlayingTrailer ? (
@@ -203,7 +208,7 @@ export function HeroBanner({ onSelectCategory, onSelectGame }) {
                   </h3>
 
                   {/* Multi-Currency Price Bar */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.75rem', paddingTop: '0.65rem', borderTop: '1px solid var(--glass-border-subtle)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.75rem', paddingTop: '0.65rem', borderTop: '1px solid var(--glass-border-subtle)', flexWrap: 'wrap', gap: '0.5rem' }}>
                     <div>
                       <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', display: 'block' }}>Direct Price ({currency})</span>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.35rem' }}>
@@ -233,42 +238,44 @@ export function HeroBanner({ onSelectCategory, onSelectGame }) {
           <div 
             style={{ 
               display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', 
-              gap: '1rem', 
-              marginTop: '2rem',
-              paddingTop: '1.5rem',
-              borderTop: '1px solid var(--glass-border-subtle)'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', 
+              gap: '0.85rem', 
+              marginTop: '1.75rem',
+              paddingTop: '1.25rem',
+              borderTop: '1px solid var(--glass-border-subtle)',
+              width: '100%',
+              boxSizing: 'border-box'
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <ShieldCheck size={18} color="currentColor" />
               <div>
-                <div style={{ fontWeight: 600, fontSize: '0.88rem' }}>100% Anti-Rollback</div>
-                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Verified creation receipts</div>
+                <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>100% Anti-Rollback</div>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Verified receipts</div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <Zap size={18} color="currentColor" />
               <div>
-                <div style={{ fontWeight: 600, fontSize: '0.88rem' }}>Instant Handover</div>
-                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Avg under 2 minutes</div>
+                <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>Instant Handover</div>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Avg &lt; 2 minutes</div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <MessageSquare size={18} color="currentColor" />
               <div>
-                <div style={{ fontWeight: 600, fontSize: '0.88rem' }}>3 Dedicated Admins</div>
-                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Rex, RetiredonTT, GR 007</div>
+                <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>3 Dedicated Admins</div>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Rex, RetiredonTT, 007</div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <Trophy size={18} color="currentColor" />
               <div>
-                <div style={{ fontWeight: 600, fontSize: '0.88rem' }}>Multi-Currency Ready</div>
-                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>USD, TZS, Naira (NGN)</div>
+                <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>Multi-Currency</div>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>USD, TZS, NGN</div>
               </div>
             </div>
           </div>

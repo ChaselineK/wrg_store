@@ -1,6 +1,6 @@
 import React from 'react';
 import { ProductCard } from './ProductCard';
-import { Gamepad2, PlusCircle, RefreshCw, Lock, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Gamepad2, PlusCircle, RefreshCw, Lock, ArrowRight } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { GlassButton } from '../ui/GlassButton';
 
@@ -26,7 +26,9 @@ export function ProductGrid({ products, onResetFilters }) {
           alignItems: 'center',
           justifyContent: 'center',
           gap: '1rem',
-          margin: '2rem 0'
+          margin: '2rem 0',
+          width: '100%',
+          boxSizing: 'border-box'
         }}
       >
         <div 
@@ -53,7 +55,7 @@ export function ProductGrid({ products, onResetFilters }) {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', justifyContent: 'center' }}>
           {onResetFilters && (
             <GlassButton
               variant="secondary"
@@ -92,15 +94,18 @@ export function ProductGrid({ products, onResetFilters }) {
   const visibleProducts = isGuest ? products.slice(0, 3) : products;
 
   return (
-    <div style={{ marginBottom: '3rem' }}>
+    <div style={{ marginBottom: '3rem', width: '100%', boxSizing: 'border-box' }}>
       
-      {/* Product Cards Grid */}
+      {/* Product Cards Grid - Zero Horizontal Overflow */}
       <div
+        className="products-responsive-grid"
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
           gap: '1.25rem',
-          marginBottom: '2rem'
+          marginBottom: '2rem',
+          width: '100%',
+          boxSizing: 'border-box'
         }}
       >
         {visibleProducts.map((product) => (
@@ -122,7 +127,9 @@ export function ProductGrid({ products, onResetFilters }) {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            position: 'relative'
+            position: 'relative',
+            width: '100%',
+            boxSizing: 'border-box'
           }}
         >
           <div 

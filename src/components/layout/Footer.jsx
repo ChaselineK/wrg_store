@@ -12,7 +12,9 @@ export function Footer() {
         borderTop: '1px solid var(--glass-border-subtle)',
         background: 'var(--glass-nav)',
         backdropFilter: 'blur(16px)',
-        padding: '2.5rem 0 1.5rem 0'
+        padding: '2.5rem 0 1.5rem 0',
+        width: '100%',
+        boxSizing: 'border-box'
       }}
     >
       <div className="app-container">
@@ -20,9 +22,11 @@ export function Footer() {
         <div 
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '2rem',
-            marginBottom: '2rem'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
+            gap: '1.5rem',
+            marginBottom: '2rem',
+            width: '100%',
+            boxSizing: 'border-box'
           }}
         >
           {/* Brand */}
@@ -40,7 +44,7 @@ export function Footer() {
                   color: '#fff'
                 }}
               >
-                <Gamepad2 size={18} />
+                <Gamepad2 size={18} color="#ffffff" />
               </div>
               <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1.1rem' }}>
                 WRG <span className="text-gradient">STORE</span>
@@ -52,7 +56,7 @@ export function Footer() {
             </p>
 
             <span className="glass-badge glass-badge-emerald" style={{ fontSize: '0.72rem' }}>
-              <ShieldCheck size={12} /> Anti-Rollback Warranty
+              <ShieldCheck size={12} color="currentColor" /> Anti-Rollback Warranty
             </span>
           </div>
 
@@ -78,7 +82,7 @@ export function Footer() {
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.4rem', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
               {admins.map((adm) => (
                 <li key={adm.id} style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                  <MessageSquare size={11} color="var(--emerald-accent)" />
+                  <MessageSquare size={11} color="currentColor" />
                   <span>{adm.name}</span>
                   <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>({adm.whatsapp})</span>
                 </li>

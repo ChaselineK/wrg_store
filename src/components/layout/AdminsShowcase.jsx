@@ -13,7 +13,7 @@ export function AdminsShowcase() {
   const { admins, isAdmin, setIsAdminManagerOpen } = useStore();
 
   return (
-    <section id="verified-admins-section" style={{ padding: '2.5rem 0 1.5rem 0', position: 'relative' }}>
+    <section id="verified-admins-section" style={{ padding: '2.5rem 0 1.5rem 0', position: 'relative', width: '100%', boxSizing: 'border-box' }}>
       <div className="app-container">
         
         {/* Section Header */}
@@ -42,12 +42,14 @@ export function AdminsShowcase() {
           )}
         </div>
 
-        {/* Admins Grid */}
+        {/* Admins Grid - Zero Overflow */}
         <div 
           style={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-            gap: '1rem' 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 270px), 1fr))', 
+            gap: '1rem',
+            width: '100%',
+            boxSizing: 'border-box'
           }}
         >
           {admins.map((admin) => (
@@ -60,7 +62,9 @@ export function AdminsShowcase() {
                 display: 'flex',
                 flexDirection: 'column',
                 height: '100%',
-                border: '1px solid var(--glass-border-subtle)'
+                border: '1px solid var(--glass-border-subtle)',
+                width: '100%',
+                boxSizing: 'border-box'
               }}
             >
               {/* Top Row: Avatar & Status */}

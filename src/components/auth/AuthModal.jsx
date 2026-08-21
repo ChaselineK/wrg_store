@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { 
   X, 
   ShieldCheck, 
-  Lock, 
-  User, 
   ArrowRight, 
   Gamepad2, 
   Eye, 
@@ -92,14 +90,17 @@ export function AuthModal() {
       style={{
         position: 'fixed',
         inset: 0,
-        width: '100vw',
+        width: '100%',
+        maxWidth: '100vw',
         height: '100vh',
         zIndex: 9999,
         background: 'var(--bg-main)',
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
         overflowY: 'auto',
-        WebkitOverflowScrolling: 'touch'
+        overflowX: 'hidden',
+        WebkitOverflowScrolling: 'touch',
+        boxSizing: 'border-box'
       }}
     >
       {/* Interactive Cursor Spotlight Glow */}
@@ -120,10 +121,10 @@ export function AuthModal() {
         className="glass-panel"
         style={{
           position: 'fixed',
-          top: '1.25rem',
-          right: '1.25rem',
-          width: '40px',
-          height: '40px',
+          top: '1rem',
+          right: '1rem',
+          width: '38px',
+          height: '38px',
           borderRadius: '50%',
           display: 'flex',
           alignItems: 'center',
@@ -151,17 +152,18 @@ export function AuthModal() {
         <X size={18} />
       </button>
 
-      {/* LEFT SIDE: Visual Showcase (Smooth side glow without inner card hovering) */}
+      {/* LEFT SIDE: Visual Showcase */}
       <div 
         onMouseEnter={() => setActiveSide('left')}
         onMouseLeave={() => setActiveSide(null)}
         style={{
           height: '100%',
           minHeight: '100vh',
+          width: '100%',
           background: activeSide === 'left'
             ? 'linear-gradient(145deg, rgba(200, 29, 32, 0.98) 0%, rgba(12, 14, 18, 0.99) 100%)'
             : 'linear-gradient(145deg, rgba(186, 24, 27, 0.96) 0%, rgba(10, 11, 14, 0.98) 100%)',
-          padding: 'clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3.5vw, 3rem)',
+          padding: 'clamp(1.25rem, 2.5vw, 2.25rem) clamp(1rem, 2.5vw, 2.5rem)',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -173,14 +175,14 @@ export function AuthModal() {
           transition: 'background 0.35s ease'
         }}
       >
-        <div style={{ maxWidth: '480px', width: '100%', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ maxWidth: '460px', width: '100%', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '0.85rem', boxSizing: 'border-box' }}>
           
           {/* Brand Header */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', width: 'fit-content' }}>
             <div 
               style={{
-                width: '40px',
-                height: '40px',
+                width: '38px',
+                height: '38px',
                 borderRadius: 'var(--radius-xs)',
                 background: '#ffffff',
                 color: 'var(--accent-primary)',
@@ -190,13 +192,13 @@ export function AuthModal() {
                 boxShadow: '0 4px 16px rgba(0,0,0,0.35)'
               }}
             >
-              <Gamepad2 size={24} />
+              <Gamepad2 size={22} color="currentColor" />
             </div>
             <div>
-              <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1.35rem', letterSpacing: '-0.02em', display: 'block' }}>
+              <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '1.25rem', letterSpacing: '-0.02em', display: 'block' }}>
                 WRG STORE
               </span>
-              <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.75)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              <span style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.75)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 Verified Gaming Accounts & Escrow
               </span>
             </div>
@@ -204,34 +206,36 @@ export function AuthModal() {
 
           {/* Title & Tagline */}
           <div>
-            <h1 style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.1rem)', fontWeight: 800, lineHeight: 1.2, marginBottom: '0.4rem' }}>
+            <h1 style={{ fontSize: 'clamp(1.35rem, 2.2vw, 1.95rem)', fontWeight: 800, lineHeight: 1.2, marginBottom: '0.35rem' }}>
               {isRegisterView ? 'Create Your Account' : 'Welcome to WRG Store'}
             </h1>
 
-            <p className="serif-subheading" style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.9)', lineHeight: 1.4, margin: 0 }}>
+            <p className="serif-subheading" style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.9)', lineHeight: 1.4, margin: 0 }}>
               Verified gaming accounts, in-game currency top-ups, and direct WhatsApp contact with our 3 verified representatives.
             </p>
           </div>
 
-          {/* Benefit Items (No card hovering) */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+          {/* Benefit Items */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', width: '100%', boxSizing: 'border-box' }}>
             
             {/* Item 1: Anti-Rollback */}
             <div 
               style={{
-                padding: '0.75rem 1rem',
+                padding: '0.7rem 0.85rem',
                 borderRadius: 'var(--radius-sm)',
                 background: 'rgba(255,255,255,0.1)',
                 border: '1px solid rgba(255,255,255,0.22)',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.75rem'
+                gap: '0.65rem',
+                width: '100%',
+                boxSizing: 'border-box'
               }}
             >
               <div 
                 style={{
-                  width: '36px',
-                  height: '36px',
+                  width: '34px',
+                  height: '34px',
                   borderRadius: '50%',
                   background: 'rgba(255,255,255,0.2)',
                   display: 'flex',
@@ -240,30 +244,32 @@ export function AuthModal() {
                   flexShrink: 0
                 }}
               >
-                <ShieldCheck size={20} color="#fff" />
+                <ShieldCheck size={18} color="#fff" />
               </div>
               <div>
-                <div style={{ fontWeight: 700, fontSize: '0.88rem' }}>100% Anti-Rollback Security</div>
-                <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)' }}>Full email domain handover and lifetime warranty</div>
+                <div style={{ fontWeight: 700, fontSize: '0.85rem' }}>100% Anti-Rollback Security</div>
+                <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.8)' }}>Full email domain handover & warranty</div>
               </div>
             </div>
 
             {/* Item 2: 3 Admins */}
             <div 
               style={{
-                padding: '0.75rem 1rem',
+                padding: '0.7rem 0.85rem',
                 borderRadius: 'var(--radius-sm)',
                 background: 'rgba(255,255,255,0.1)',
                 border: '1px solid rgba(255,255,255,0.22)',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.75rem'
+                gap: '0.65rem',
+                width: '100%',
+                boxSizing: 'border-box'
               }}
             >
               <div 
                 style={{
-                  width: '36px',
-                  height: '36px',
+                  width: '34px',
+                  height: '34px',
                   borderRadius: '50%',
                   background: 'rgba(255,255,255,0.2)',
                   display: 'flex',
@@ -272,34 +278,38 @@ export function AuthModal() {
                   flexShrink: 0
                 }}
               >
-                <Zap size={20} color="#fff" />
+                <Zap size={18} color="#fff" />
               </div>
               <div>
-                <div style={{ fontWeight: 700, fontSize: '0.88rem' }}>3 Dedicated WhatsApp Admins</div>
-                <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)' }}>Richkid Rex (+255740866470), RetiredonTT & GR 007</div>
+                <div style={{ fontWeight: 700, fontSize: '0.85rem' }}>3 Dedicated WhatsApp Admins</div>
+                <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.8)' }}>Rex (+255740866470), RetiredonTT & GR 007</div>
               </div>
             </div>
 
             {/* Item 3: Multi-Currency */}
             <div 
               style={{
-                padding: '0.65rem 1rem',
+                padding: '0.6rem 0.85rem',
                 borderRadius: 'var(--radius-sm)',
                 background: 'rgba(255,255,255,0.08)',
                 border: '1px solid rgba(255,255,255,0.18)',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '0.4rem',
+                width: '100%',
+                boxSizing: 'border-box'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Globe size={16} color="#fff" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                <Globe size={15} color="#fff" />
                 <span style={{ fontSize: '0.78rem', fontWeight: 600 }}>Multi-Currency Pricing</span>
               </div>
-              <div style={{ display: 'flex', gap: '0.3rem' }}>
-                <span className="glass-badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', fontSize: '0.68rem', padding: '0.15rem 0.4rem' }}>USD ($)</span>
-                <span className="glass-badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', fontSize: '0.68rem', padding: '0.15rem 0.4rem' }}>TZS</span>
-                <span className="glass-badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', fontSize: '0.68rem', padding: '0.15rem 0.4rem' }}>NGN (₦)</span>
+              <div style={{ display: 'flex', gap: '0.25rem' }}>
+                <span className="glass-badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', fontSize: '0.65rem', padding: '0.15rem 0.35rem' }}>USD ($)</span>
+                <span className="glass-badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', fontSize: '0.65rem', padding: '0.15rem 0.35rem' }}>TZS</span>
+                <span className="glass-badge" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', fontSize: '0.65rem', padding: '0.15rem 0.35rem' }}>NGN (₦)</span>
               </div>
             </div>
 
@@ -308,21 +318,23 @@ export function AuthModal() {
           {/* Integrated Compact Guest Action Banner */}
           <div 
             style={{ 
-              marginTop: '0.5rem', 
-              paddingTop: '0.75rem', 
+              marginTop: '0.35rem', 
+              paddingTop: '0.65rem', 
               borderTop: '1px solid rgba(255,255,255,0.18)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              gap: '0.75rem',
-              flexWrap: 'wrap'
+              gap: '0.5rem',
+              flexWrap: 'wrap',
+              width: '100%',
+              boxSizing: 'border-box'
             }}
           >
             <div>
-              <span style={{ fontSize: '0.82rem', fontWeight: 700, display: 'block' }}>
+              <span style={{ fontSize: '0.8rem', fontWeight: 700, display: 'block' }}>
                 Want to browse listings first?
               </span>
-              <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.75)' }}>
+              <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.75)' }}>
                 Explore preview accounts in guest mode
               </span>
             </div>
@@ -333,10 +345,10 @@ export function AuthModal() {
                 background: 'rgba(255,255,255,0.2)',
                 border: '1px solid rgba(255,255,255,0.45)',
                 color: '#ffffff',
-                padding: '0.5rem 1.1rem',
+                padding: '0.45rem 0.95rem',
                 borderRadius: 'var(--radius-xs)',
                 cursor: 'pointer',
-                fontSize: '0.82rem',
+                fontSize: '0.8rem',
                 fontWeight: 700,
                 transition: 'background 0.2s ease',
                 display: 'flex',
@@ -353,22 +365,23 @@ export function AuthModal() {
               }}
             >
               <span>Visit as Guest</span>
-              <ArrowRight size={14} />
+              <ArrowRight size={13} />
             </button>
           </div>
 
         </div>
       </div>
 
-      {/* RIGHT SIDE: Sliding Sign In / Register Portal (Clean, Static Form Card) */}
+      {/* RIGHT SIDE: Sliding Sign In / Register Portal */}
       <div 
         onMouseEnter={() => setActiveSide('right')}
         onMouseLeave={() => setActiveSide(null)}
         style={{
           height: '100%',
           minHeight: '100vh',
+          width: '100%',
           background: activeSide === 'right' ? 'var(--glass-bg-hover)' : 'var(--glass-modal)',
-          padding: 'clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3.5vw, 3rem)',
+          padding: 'clamp(1.25rem, 2.5vw, 2.25rem) clamp(1rem, 2.5vw, 2.5rem)',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -379,17 +392,18 @@ export function AuthModal() {
           transition: 'background 0.35s ease'
         }}
       >
-        {/* Form Container (Hover effect completely removed) */}
+        {/* Form Container */}
         <div 
           style={{ 
-            maxWidth: '420px', 
+            maxWidth: '400px', 
             width: '100%', 
             margin: '0 auto',
-            padding: '2rem',
+            padding: 'clamp(1.25rem, 3vw, 2rem)',
             borderRadius: 'var(--radius-lg)',
             background: 'var(--glass-card)',
             border: '1px solid var(--glass-border-subtle)',
-            boxShadow: 'var(--glass-shadow-lg)'
+            boxShadow: 'var(--glass-shadow-lg)',
+            boxSizing: 'border-box'
           }}
         >
           
@@ -401,8 +415,10 @@ export function AuthModal() {
               gridTemplateColumns: '1fr 1fr',
               padding: '0.25rem',
               borderRadius: 'var(--radius-sm)',
-              marginBottom: '1.5rem',
-              border: '1px solid var(--glass-border-subtle)'
+              marginBottom: '1.25rem',
+              border: '1px solid var(--glass-border-subtle)',
+              width: '100%',
+              boxSizing: 'border-box'
             }}
           >
             <button
@@ -412,13 +428,13 @@ export function AuthModal() {
                 setErrorMessage('');
               }}
               style={{
-                padding: '0.6rem',
+                padding: '0.55rem',
                 borderRadius: 'var(--radius-xs)',
                 border: 'none',
                 background: !isRegisterView ? 'var(--accent-gradient)' : 'transparent',
                 color: !isRegisterView ? '#fff' : 'var(--text-secondary)',
                 cursor: 'pointer',
-                fontSize: '0.88rem',
+                fontSize: '0.85rem',
                 fontWeight: 700,
                 transition: 'all 0.25s ease'
               }}
@@ -433,13 +449,13 @@ export function AuthModal() {
                 setErrorMessage('');
               }}
               style={{
-                padding: '0.6rem',
+                padding: '0.55rem',
                 borderRadius: 'var(--radius-xs)',
                 border: 'none',
                 background: isRegisterView ? 'var(--accent-gradient)' : 'transparent',
                 color: isRegisterView ? '#fff' : 'var(--text-secondary)',
                 cursor: 'pointer',
-                fontSize: '0.88rem',
+                fontSize: '0.85rem',
                 fontWeight: 700,
                 transition: 'all 0.25s ease'
               }}
@@ -459,7 +475,9 @@ export function AuthModal() {
                 color: 'var(--accent-primary)',
                 fontSize: '0.8rem',
                 marginBottom: '1rem',
-                fontWeight: 600
+                fontWeight: 600,
+                width: '100%',
+                boxSizing: 'border-box'
               }}
             >
               {errorMessage}
@@ -468,7 +486,7 @@ export function AuthModal() {
 
           {/* Sign In Form */}
           {!isRegisterView ? (
-            <form onSubmit={handleLogin} className="animate-slide-right" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <form onSubmit={handleLogin} className="animate-slide-right" style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem', width: '100%', boxSizing: 'border-box' }}>
               <div>
                 <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.35rem', color: 'var(--text-secondary)' }}>
                   Username
@@ -479,7 +497,7 @@ export function AuthModal() {
                   className="glass-input"
                   value={loginUsername}
                   onChange={(e) => setLoginUsername(e.target.value)}
-                  style={{ height: '42px', fontSize: '0.9rem' }}
+                  style={{ height: '40px', fontSize: '0.88rem' }}
                 />
               </div>
 
@@ -493,7 +511,7 @@ export function AuthModal() {
                     onClick={() => setShowPassword(!showPassword)}
                     style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.2rem' }}
                   >
-                    {showPassword ? <EyeOff size={13} /> : <Eye size={13} />}
+                    {showPassword ? <EyeOff size={13} color="currentColor" /> : <Eye size={13} color="currentColor" />}
                     <span>{showPassword ? 'Hide' : 'Show'}</span>
                   </button>
                 </div>
@@ -503,7 +521,7 @@ export function AuthModal() {
                   className="glass-input"
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
-                  style={{ height: '42px', fontSize: '0.9rem' }}
+                  style={{ height: '40px', fontSize: '0.88rem' }}
                 />
               </div>
 
@@ -513,12 +531,12 @@ export function AuthModal() {
                 size="md"
                 icon={ArrowRight}
                 fullWidth
-                style={{ marginTop: '0.35rem', height: '44px', fontSize: '0.92rem', fontWeight: 700 }}
+                style={{ marginTop: '0.35rem', height: '42px', fontSize: '0.9rem', fontWeight: 700 }}
               >
                 Sign In to Marketplace
               </GlassButton>
 
-              <div style={{ textAlign: 'center', marginTop: '0.75rem' }}>
+              <div style={{ textAlign: 'center', marginTop: '0.65rem' }}>
                 <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                   Don't have an account?{' '}
                   <button
@@ -536,9 +554,9 @@ export function AuthModal() {
             </form>
           ) : (
             /* Register Form */
-            <form onSubmit={handleRegister} className="animate-slide-left" style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+            <form onSubmit={handleRegister} className="animate-slide-left" style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', width: '100%', boxSizing: 'border-box' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, marginBottom: '0.3rem', color: 'var(--text-secondary)' }}>
+                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, marginBottom: '0.25rem', color: 'var(--text-secondary)' }}>
                   Choose Username
                 </label>
                 <input
@@ -547,12 +565,12 @@ export function AuthModal() {
                   className="glass-input"
                   value={regUsername}
                   onChange={(e) => setRegUsername(e.target.value)}
-                  style={{ height: '40px', fontSize: '0.88rem' }}
+                  style={{ height: '38px', fontSize: '0.85rem' }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, marginBottom: '0.3rem', color: 'var(--text-secondary)' }}>
+                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, marginBottom: '0.25rem', color: 'var(--text-secondary)' }}>
                   Display Name (Optional)
                 </label>
                 <input
@@ -560,12 +578,12 @@ export function AuthModal() {
                   className="glass-input"
                   value={regDisplayName}
                   onChange={(e) => setRegDisplayName(e.target.value)}
-                  style={{ height: '40px', fontSize: '0.88rem' }}
+                  style={{ height: '38px', fontSize: '0.85rem' }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, marginBottom: '0.3rem', color: 'var(--text-secondary)' }}>
+                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, marginBottom: '0.25rem', color: 'var(--text-secondary)' }}>
                   Password
                 </label>
                 <input
@@ -574,12 +592,12 @@ export function AuthModal() {
                   className="glass-input"
                   value={regPassword}
                   onChange={(e) => setRegPassword(e.target.value)}
-                  style={{ height: '40px', fontSize: '0.88rem' }}
+                  style={{ height: '38px', fontSize: '0.85rem' }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, marginBottom: '0.3rem', color: 'var(--text-secondary)' }}>
+                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, marginBottom: '0.25rem', color: 'var(--text-secondary)' }}>
                   Confirm Password
                 </label>
                 <input
@@ -588,7 +606,7 @@ export function AuthModal() {
                   className="glass-input"
                   value={regConfirmPassword}
                   onChange={(e) => setRegConfirmPassword(e.target.value)}
-                  style={{ height: '40px', fontSize: '0.88rem' }}
+                  style={{ height: '38px', fontSize: '0.85rem' }}
                 />
               </div>
 
@@ -598,12 +616,12 @@ export function AuthModal() {
                 size="md"
                 icon={ArrowRight}
                 fullWidth
-                style={{ marginTop: '0.35rem', height: '44px', fontSize: '0.92rem', fontWeight: 700 }}
+                style={{ marginTop: '0.35rem', height: '42px', fontSize: '0.9rem', fontWeight: 700 }}
               >
                 Create Account & Enter
               </GlassButton>
 
-              <div style={{ textAlign: 'center', marginTop: '0.65rem' }}>
+              <div style={{ textAlign: 'center', marginTop: '0.55rem' }}>
                 <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                   Already registered?{' '}
                   <button
