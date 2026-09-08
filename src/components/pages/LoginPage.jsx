@@ -23,6 +23,7 @@ import { triggerErrorHaptic, triggerCheckoutHaptic } from '../../utils/haptics';
 export function LoginPage() {
   const { 
     currentUser, 
+    isAdmin,
     loginWithCredentials, 
     registerUser, 
     logout, 
