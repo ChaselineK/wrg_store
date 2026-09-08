@@ -13,7 +13,6 @@ export function MobileBottomNav() {
     currentPage, 
     navigateTo, 
     isAdmin, 
-    currentUser,
     cartCount 
   } = useStore();
 
@@ -36,7 +35,7 @@ export function MobileBottomNav() {
           const currentScrollY = window.scrollY || 0;
           const delta = currentScrollY - lastScrollYRef.current;
 
-          // Always visible near the top or when reaching the bottom of the page
+          // Always visible near top or when reaching the bottom of the page
           const isNearTop = currentScrollY <= 40;
           const isNearBottom = window.innerHeight + currentScrollY >= document.documentElement.scrollHeight - 60;
 
@@ -61,7 +60,11 @@ export function MobileBottomNav() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Visible inside the app only, not outside on login page
+  if (currentPage === 'login') return null;
+
   // Navigation items based on role
+  // Last option is strictly 'Profile'
   const navItems = isAdmin ? [
     {
       id: 'admin',
@@ -117,10 +120,10 @@ export function MobileBottomNav() {
     },
     {
       id: 'profile',
-      label: currentUser?.isGuest ? 'Login' : 'Profile',
+      label: 'Profile',
       icon: User,
-      isActive: currentPage === 'profile' || currentPage === 'login',
-      onClick: () => navigateTo(currentUser?.isGuest ? 'login' : 'profile')
+      isActive: currentPage === 'profile',
+      onClick: () => navigateTo('profile')
     }
   ];
 
@@ -136,16 +139,16 @@ export function MobileBottomNav() {
         maxWidth: '430px',
         margin: '0 auto',
         zIndex: 9999,
-        borderRadius: '26px',
-        background: 'rgba(255, 255, 255, 0.82)',
-        backdropFilter: 'blur(28px) saturate(190%)',
-        WebkitBackdropFilter: 'blur(28px) saturate(190%)',
-        border: '1px solid rgba(255, 255, 255, 0.85)',
-        boxShadow: '0 14px 34px -4px rgba(0, 102, 255, 0.16), 0 6px 20px -2px rgba(15, 23, 42, 0.10), inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 2px 0 rgba(0, 102, 255, 0.04)',
+        borderRadius: '28px',
+        background: 'rgba(255, 255, 255, 0.65)',
+        backdropFilter: 'blur(36px) saturate(220%)',
+        WebkitBackdropFilter: 'blur(36px) saturate(220%)',
+        border: '1.5px solid rgba(255, 255, 255, 0.92)',
+        boxShadow: '0 22px 48px -6px rgba(0, 102, 255, 0.22), 0 8px 24px -2px rgba(15, 23, 42, 0.12), inset 0 2px 2px 0 rgba(255, 255, 255, 0.98), inset 0 -1.5px 2px 0 rgba(0, 102, 255, 0.08)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-around',
-        padding: '6px 10px calc(6px + env(safe-area-inset-bottom, 0px)) 10px',
+        padding: '7px 10px calc(7px + env(safe-area-inset-bottom, 0px)) 10px',
         transform: isVisible ? 'translateY(0) scale(1)' : 'translateY(140%) scale(0.95)',
         opacity: isVisible ? 1 : 0,
         pointerEvents: isVisible ? 'auto' : 'none',
@@ -187,17 +190,18 @@ export function MobileBottomNav() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '4px 14px',
-                borderRadius: '16px',
-                background: active ? 'rgba(0, 102, 255, 0.12)' : 'transparent',
+                padding: '5px 16px',
+                borderRadius: '18px',
+                background: active ? 'rgba(0, 102, 255, 0.16)' : 'transparent',
+                border: active ? '1px solid rgba(0, 102, 255, 0.25)' : '1px solid transparent',
                 transform: active ? 'scale(1.05)' : 'scale(1)',
-                boxShadow: active ? '0 2px 8px rgba(0, 102, 255, 0.12), inset 0 1px 0.5px rgba(255, 255, 255, 0.6)' : 'none',
-                transition: 'background 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease'
+                boxShadow: active ? '0 4px 14px rgba(0, 102, 255, 0.22), inset 0 1px 1.5px rgba(255, 255, 255, 0.85)' : 'none',
+                transition: 'background 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease'
               }}
             >
               <IconComponent 
                 size={21} 
-                strokeWidth={active ? 2.4 : 1.8} 
+                strokeWidth={active ? 2.5 : 1.8} 
                 color={active ? '#0066ff' : '#64748b'}
                 style={{
                   transition: 'color 0.2s ease, stroke-width 0.2s ease'
@@ -218,7 +222,7 @@ export function MobileBottomNav() {
                     minWidth: '15px',
                     lineHeight: '1.2',
                     textAlign: 'center',
-                    boxShadow: '0 2px 6px rgba(0, 102, 255, 0.4)'
+                    boxShadow: '0 2px 8px rgba(0, 102, 255, 0.5)'
                   }}
                 >
                   {item.badge}
@@ -249,7 +253,7 @@ export function MobileBottomNav() {
                   borderRadius: '50%',
                   background: '#0066ff',
                   marginTop: '2px',
-                  boxShadow: '0 0 6px rgba(0, 102, 255, 0.8)',
+                  boxShadow: '0 0 10px rgba(0, 102, 255, 1)',
                   transition: 'all 0.2s ease'
                 }}
               />
