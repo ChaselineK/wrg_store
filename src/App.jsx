@@ -15,10 +15,11 @@ import { LoginPage } from './components/pages/LoginPage';
 import { AdminDashboardPage } from './components/pages/AdminDashboardPage';
 import { TermsPage } from './components/pages/TermsPage';
 import { PrivacyPage } from './components/pages/PrivacyPage';
+import { ProfilePage } from './components/pages/ProfilePage';
 import { Error404Page } from './components/pages/Error404Page';
 import { Error500Page } from './components/pages/Error500Page';
-
-import { ShieldCheck, SlidersHorizontal, LogOut, Bug } from 'lucide-react';
+import { MobileBottomNav } from './components/layout/MobileBottomNav';
+import { Analytics } from '@vercel/analytics/react';
 
 function StoreMain() {
   const { 
@@ -53,6 +54,8 @@ function StoreMain() {
         return <TermsPage key="terms" />;
       case 'privacy':
         return <PrivacyPage key="privacy" />;
+      case 'profile':
+        return <ProfilePage key="profile" />;
       case 'login':
         return <LoginPage key="login" />;
       case 'admin':
@@ -69,72 +72,6 @@ function StoreMain() {
   return (
     <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg-main)' }}>
       
-      {/* Admin Notice Bar if logged in with Administrator Credentials */}
-      {isAdmin && (
-        <div 
-          style={{
-            background: '#0052cc',
-            color: '#ffffff',
-            padding: '0.4rem 1rem',
-            fontSize: '0.78rem',
-            fontWeight: 600,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '0.5rem',
-            zIndex: 110
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-            <ShieldCheck size={14} />
-            <span>
-              {isSuperAdmin ? 'Super Admin Mode' : 'Admin Mode'}: Active as {currentUser?.name}
-            </span>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <button
-              onClick={() => navigateTo('admin')}
-              style={{
-                background: 'rgba(255, 255, 255, 0.2)',
-                border: 'none',
-                color: '#ffffff',
-                padding: '0.2rem 0.6rem',
-                borderRadius: 'var(--radius-xs)',
-                cursor: 'pointer',
-                fontSize: '0.74rem',
-                fontWeight: 600,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.25rem'
-              }}
-            >
-              <SlidersHorizontal size={11} /> Manage Dashboard
-            </button>
-
-            <button
-              onClick={logout}
-              style={{
-                background: 'rgba(255, 255, 255, 0.2)',
-                border: 'none',
-                color: '#ffffff',
-                padding: '0.2rem 0.6rem',
-                borderRadius: 'var(--radius-xs)',
-                cursor: 'pointer',
-                fontSize: '0.74rem',
-                fontWeight: 600,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.25rem'
-              }}
-            >
-              <LogOut size={11} /> Log Out
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Navigation Header - Hidden on Login Page */}
       {currentPage !== 'login' && (
         <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
@@ -148,6 +85,9 @@ function StoreMain() {
       {/* Footer - Hidden on Login Page */}
       {currentPage !== 'login' && <Footer />}
 
+      {/* Mobile Disappearing Bottom Navigation */}
+      <MobileBottomNav />
+
     </div>
   );
 }
@@ -156,6 +96,7 @@ export default function App() {
   return (
     <StoreProvider>
       <StoreMain />
+      <Analytics />
     </StoreProvider>
   );
 }

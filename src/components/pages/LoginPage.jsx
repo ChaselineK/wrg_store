@@ -82,8 +82,9 @@ export function LoginPage() {
 
     triggerCheckoutHaptic();
     setSuccessMsg(`Welcome back, ${res.user.name}!`);
+    const targetPage = (res.user.role === 'admin' || res.user.role === 'super_admin') ? 'admin' : 'home';
     setTimeout(() => {
-      navigateTo('home');
+      navigateTo(targetPage);
     }, 450);
   };
 
@@ -161,11 +162,14 @@ export function LoginPage() {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <button 
-              onClick={() => navigateTo('home')} 
+              onClick={() => {
+                const targetPage = (currentUser.role === 'admin' || currentUser.role === 'super_admin') ? 'admin' : 'home';
+                navigateTo(targetPage);
+              }} 
               className="glass-btn glass-btn-primary"
               style={{ width: '100%', padding: '0.75rem' }}
             >
-              Continue to Home
+              Continue to {isAdmin ? 'Vendor Dashboard' : 'Home'}
             </button>
             <button 
               onClick={() => {

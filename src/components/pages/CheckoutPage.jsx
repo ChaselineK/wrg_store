@@ -14,7 +14,7 @@ import {
   ShoppingBag
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { formatPrice } from '../../utils/currencyHelper';
+import { CURRENCIES, formatPrice } from '../../utils/currencyHelper';
 import { triggerCheckoutHaptic, triggerErrorHaptic } from '../../utils/haptics';
 import { sanitizeInput } from '../../utils/security';
 
@@ -23,6 +23,7 @@ export function CheckoutPage() {
     cartItems, 
     cartTotal, 
     currency, 
+    setCurrency, 
     currentUser, 
     admins, 
     getEligibleVendorsForCart, 
@@ -601,8 +602,28 @@ export function CheckoutPage() {
               }}
             >
               <div>
-                <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-                  Total to Pay on WhatsApp Handover ({currency}):
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
+                  <span>Total to Pay ({currency}):</span>
+                  <select
+                    value={currency}
+                    onChange={(e) => setCurrency(e.target.value)}
+                    style={{
+                      background: '#ffffff',
+                      border: '1px solid #bfdbfe',
+                      borderRadius: 'var(--radius-xs)',
+                      padding: '0.2rem 0.5rem',
+                      fontSize: '0.76rem',
+                      fontWeight: 700,
+                      color: '#0066ff',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {Object.values(CURRENCIES).map((c) => (
+                      <option key={c.code} value={c.code}>
+                        {c.code} ({c.symbol})
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div style={{ fontSize: '1.65rem', fontWeight: 900, color: '#0066ff', fontFamily: 'var(--font-mono)' }}>
                   {formatPrice(cartTotal, currency)}

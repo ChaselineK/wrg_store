@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { INITIAL_PRODUCTS } from '../data/initialProducts';
 import { INITIAL_ADMINS } from '../data/initialAdmins';
 import { CATEGORIES as INITIAL_CATEGORIES } from '../data/gamesConfig';
@@ -17,6 +17,11 @@ const STORAGE_KEYS = {
   CURRENCY: 'wrg_currency_v3',
 };
 
+// Isolated tab-scoped session key so copied URLs in fresh tabs/windows never inherit previous user sessions
+const SESSION_STORAGE_KEYS = {
+  USER: 'wrg_session_user_v3',
+};
+
 const GUEST_USER = {
   id: 'usr_guest',
   username: 'Guest',
@@ -31,12 +36,42 @@ export function StoreProvider({ children }) {
   const [currentPage, setCurrentPageState] = useState('login');
   const [selectedProduct, setSelectedProduct] = useState(null);
 
+  // Depth tracking for in-app history to support mobile swipe-back
+  const historyDepthRef = useRef(0);
+
   const navigateTo = (page, product = null) => {
     if (product) {
       setSelectedProduct(product);
     }
     setCurrentPageState(page);
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
+    // HTML5 History API Management for Mobile Swipe-Back:
+    // Requirement:
+    // "when i swipe back, it removes mr from the web application completely. it should not do that,
+    //  when i swipe back, it should take me to the previous page. it should only remove me, when im on the login page or the home page."
+    if (page === 'home') {
+      // Returning to Home: rewind in-app history back to entry 0 so swiping back on Home exits the app
+      if (historyDepthRef.current > 0) {
+        window.history.go(-historyDepthRef.current);
+        historyDepthRef.current = 0;
+      } else {
+        window.history.replaceState({ page: 'home', product: null }, '', '#home');
+      }
+    } else if (page === 'login') {
+      // Root login page: replace entry 0 so swiping back exits
+      historyDepthRef.current = 0;
+      window.history.replaceState({ page: 'login', product: null }, '', '#login');
+    } else if (page === 'admin' && currentPage === 'login') {
+      // Direct admin login landing
+      historyDepthRef.current = 0;
+      window.history.replaceState({ page: 'admin', product: null }, '', '#admin');
+    } else {
+      // Subpages (shop, orders, profile, product-detail, checkout, etc.):
+      // Push history state so mobile swipe-back smoothly navigates to previous page!
+      window.history.pushState({ page, product }, '', '#' + page);
+      historyDepthRef.current += 1;
+    }
   };
 
   // Multi-Currency (USD, TZS, NGN)
@@ -144,10 +179,17 @@ export function StoreProvider({ children }) {
     }
   });
 
-  // Current User Session
+  // Current User Session - Strictly isolated per-tab in sessionStorage
+  // If someone copies the URL and pastes it into another fresh page/tab,
+  // sessionStorage is empty, so they are not logged in and the login page opens!
   const [currentUser, setCurrentUser] = useState(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEYS.USER);
+      // Purge any legacy domain-wide localStorage sessions
+      localStorage.removeItem(STORAGE_KEYS.USER);
+      localStorage.removeItem('wrg_current_user_v3');
+      localStorage.removeItem('wrg_user');
+
+      const saved = sessionStorage.getItem(SESSION_STORAGE_KEYS.USER);
       return saved ? JSON.parse(saved) : GUEST_USER;
     } catch {
       return GUEST_USER;
@@ -204,7 +246,7 @@ export function StoreProvider({ children }) {
   // Categories (Strictly 2 categories)
   const activeCategories = INITIAL_CATEGORIES;
 
-  // Sync to LocalStorage
+  // Sync catalog, admins, and orders to LocalStorage
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(allProducts));
   }, [allProducts]);
@@ -217,13 +259,76 @@ export function StoreProvider({ children }) {
     localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(orders));
   }, [orders]);
 
+  // Sync active user session ONLY to sessionStorage (never domain-wide localStorage)
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(currentUser));
+    try {
+      if (currentUser && !currentUser.isGuest) {
+        sessionStorage.setItem(SESSION_STORAGE_KEYS.USER, JSON.stringify(currentUser));
+      } else {
+        sessionStorage.removeItem(SESSION_STORAGE_KEYS.USER);
+      }
+    } catch {}
   }, [currentUser]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.REGISTERED_USERS, JSON.stringify(registeredUsers));
   }, [registeredUsers]);
+
+  // Handle Initial Load, Session Verification, URL Hash Security & Popstate for Swipe-Back
+  useEffect(() => {
+    // 1. URL Security & Fresh Tab Protection:
+    // If there is no active session in this tab (e.g. copied/pasted link or fresh window):
+    // Force the user to the Login page and rewrite URL hash to '#login'
+    const sessionSaved = sessionStorage.getItem(SESSION_STORAGE_KEYS.USER);
+    let activeUser = null;
+    try {
+      activeUser = sessionSaved ? JSON.parse(sessionSaved) : null;
+    } catch {}
+
+    const isAuthed = activeUser && !activeUser.isGuest;
+
+    if (!isAuthed) {
+      setCurrentPageState('login');
+      window.history.replaceState({ page: 'login', product: null }, '', '#login');
+      historyDepthRef.current = 0;
+    } else {
+      const hash = window.location.hash.replace('#', '');
+      const validPages = ['home', 'accounts', 'currency', 'product-detail', 'cart', 'checkout', 'profile', 'admin', 'vendors', 'terms', 'privacy'];
+      const pageToLoad = (hash && validPages.includes(hash))
+        ? hash
+        : ((activeUser.role === 'admin' || activeUser.role === 'super_admin') ? 'admin' : 'home');
+
+      setCurrentPageState(pageToLoad);
+      window.history.replaceState({ page: pageToLoad, product: null }, '', '#' + pageToLoad);
+      historyDepthRef.current = 0;
+    }
+
+    // 2. Listen to mobile swipe-back & browser back/forward buttons
+    const handlePopState = (event) => {
+      if (event.state && event.state.page) {
+        const targetPage = event.state.page;
+        setCurrentPageState(targetPage);
+        if (event.state.product) {
+          setSelectedProduct(event.state.product);
+        } else {
+          setSelectedProduct(null);
+        }
+        if (targetPage === 'home' || targetPage === 'login') {
+          historyDepthRef.current = 0;
+        } else {
+          historyDepthRef.current = Math.max(0, historyDepthRef.current - 1);
+        }
+      } else {
+        // Popped to the initial entry of this website
+        const fallback = (!currentUser || currentUser.isGuest) ? 'login' : 'home';
+        setCurrentPageState(fallback);
+        historyDepthRef.current = 0;
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   // Single Login Function: strictly Username and Password (email not allowed for login)
   const loginWithCredentials = (username, password) => {
@@ -249,6 +354,9 @@ export function StoreProvider({ children }) {
         sells: matchedAdmin.sells,
         isGuest: false
       };
+      try {
+        sessionStorage.setItem(SESSION_STORAGE_KEYS.USER, JSON.stringify(adminSession));
+      } catch {}
       setCurrentUser(adminSession);
       SecureSession.setSessionCookie('wrg_session', adminSession.id);
       return { success: true, user: adminSession };
@@ -270,6 +378,9 @@ export function StoreProvider({ children }) {
         avatar: matchedUser.avatar || GUEST_USER.avatar,
         isGuest: false
       };
+      try {
+        sessionStorage.setItem(SESSION_STORAGE_KEYS.USER, JSON.stringify(userSession));
+      } catch {}
       setCurrentUser(userSession);
       SecureSession.setSessionCookie('wrg_session', userSession.id);
       return { success: true, user: userSession };
@@ -322,15 +433,26 @@ export function StoreProvider({ children }) {
       avatar: newUser.avatar,
       isGuest: false
     };
+    try {
+      sessionStorage.setItem(SESSION_STORAGE_KEYS.USER, JSON.stringify(session));
+    } catch {}
     setCurrentUser(session);
     SecureSession.setSessionCookie('wrg_session', session.id);
     return { success: true, user: session };
   };
 
   const logout = useCallback(() => {
+    try {
+      sessionStorage.removeItem(SESSION_STORAGE_KEYS.USER);
+      sessionStorage.clear();
+    } catch {}
     setCurrentUser(GUEST_USER);
     SecureSession.clearSessionCookie('wrg_session');
-    navigateTo('home');
+    
+    // Replace state to login so swiping back exits web application
+    historyDepthRef.current = 0;
+    window.history.replaceState({ page: 'login', product: null }, '', '#login');
+    setCurrentPageState('login');
   }, []);
 
   // --------------------------------------------------------------------------
