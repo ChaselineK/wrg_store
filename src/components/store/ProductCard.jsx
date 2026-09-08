@@ -1,38 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
-  Heart, 
-  Video, 
-  Zap, 
-  MessageSquare, 
+  ShoppingCart, 
   Eye, 
-  Edit3, 
   Trash2, 
-  Coins
+  Video
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
-import { GlassButton } from '../ui/GlassButton';
-import { Badge } from '../ui/Badge';
 import { formatPrice } from '../../utils/currencyHelper';
 
-export function ProductCard({ product }) {
+export function ProductCard({ product, layout = 'grid' }) {
   const { 
     isAdmin, 
-    openCheckout, 
-    setActiveDetailProduct, 
-    openProductForm, 
+    navigateTo, 
+    addToCart, 
     deleteProduct, 
-    toggleFavorite, 
-    isFavorite,
     currency 
   } = useStore();
 
-  const [isHovered, setIsHovered] = useState(false);
-  const isFav = isFavorite(product.id);
   const isCurrency = product.type === 'currency';
-
-  const discountPercent = product.originalPrice && product.originalPrice > product.price
-    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
-    : null;
+  const hasAdminDiscount = Boolean(product.discount && product.discount > 0);
 
   const handleDelete = (e) => {
     e.stopPropagation();
@@ -41,294 +27,218 @@ export function ProductCard({ product }) {
     }
   };
 
-  const handleEdit = (e) => {
-    e.stopPropagation();
-    openProductForm(product);
-  };
+  const isLinear = layout === 'linear';
 
   return (
     <div 
-      className="glass-card"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      className="glass-card product-card-hover"
       style={{
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: isLinear ? 'row' : 'column',
         height: '100%',
         borderRadius: 'var(--radius-md)',
-        border: isHovered ? '1px solid var(--glass-border-hover)' : '1px solid var(--glass-border-subtle)',
-        transition: 'transform var(--transition-normal), border-color var(--transition-normal)'
+        border: '1px solid var(--glass-border)',
+        background: '#ffffff',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+        transition: 'all 0.2s ease',
+        boxShadow: 'var(--glass-shadow)'
       }}
     >
       {/* Card Media Container */}
       <div 
-        style={{ position: 'relative', width: '100%', height: '190px', overflow: 'hidden', cursor: 'pointer' }}
-        onClick={() => setActiveDetailProduct(product)}
+        style={{ 
+          position: 'relative', 
+          width: isLinear ? '160px' : '100%', 
+          minWidth: isLinear ? '140px' : '100%',
+          height: isLinear ? 'auto' : '190px', 
+          minHeight: isLinear ? '150px' : '190px',
+          overflow: 'hidden', 
+          cursor: 'pointer', 
+          background: '#0f172a',
+          flexShrink: 0
+        }}
+        onClick={() => navigateTo(isCurrency ? 'currency' : 'product-detail', product)}
       >
         <img
-          src={product.images[0] || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800'}
+          src={product.images?.[0] || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800'}
           alt={product.title}
           style={{
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            transform: isHovered ? 'scale(1.03)' : 'scale(1)',
             transition: 'transform 0.3s ease'
           }}
+          className="product-card-img"
         />
 
         <div
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(to top, rgba(10,11,14,0.85) 0%, transparent 55%)',
+            background: 'linear-gradient(to top, rgba(15, 23, 42, 0.6) 0%, transparent 60%)',
             pointerEvents: 'none'
           }}
         />
 
-        {/* Top Badges */}
+        {/* Badges */}
         <div
           style={{
             position: 'absolute',
-            top: '0.65rem',
-            left: '0.65rem',
+            top: '0.5rem',
+            left: '0.5rem',
             display: 'flex',
             flexDirection: 'column',
-            gap: '0.3rem',
+            gap: '0.25rem',
             zIndex: 5
           }}
         >
-          {product.isInstantDelivery && (
-            <span className="glass-badge" style={{ background: 'rgba(0,0,0,0.65)', color: '#fff' }}>
-              <Zap size={10} color="#fff" /> Instant
-            </span>
-          )}
-
-          {discountPercent && (
-            <span className="glass-badge" style={{ background: 'var(--accent-primary)', color: '#fff' }}>
-              -{discountPercent}%
+          {hasAdminDiscount && (
+            <span 
+              style={{ 
+                background: '#0066ff', 
+                color: '#ffffff', 
+                fontSize: '0.7rem', 
+                fontWeight: 800, 
+                padding: '0.2rem 0.45rem', 
+                borderRadius: 'var(--radius-xs)',
+                boxShadow: '0 2px 6px rgba(0,102,255,0.3)'
+              }}
+            >
+              -{product.discount}% OFF
             </span>
           )}
 
           {product.videoUrl && (
             <span
-              className="glass-badge"
-              style={{ background: 'rgba(0,0,0,0.65)', color: '#fff', borderColor: 'rgba(255,255,255,0.15)' }}
+              style={{
+                background: 'rgba(15, 23, 42, 0.85)',
+                color: '#ffffff',
+                fontSize: '0.65rem',
+                fontWeight: 600,
+                padding: '0.15rem 0.45rem',
+                borderRadius: 'var(--radius-xs)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.25rem'
+              }}
             >
-              <Video size={10} color="#fff" /> Video
+              <Video size={10} /> Video
             </span>
           )}
         </div>
 
-        {/* Wishlist & Admin Actions */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '0.65rem',
-            right: '0.65rem',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.35rem',
-            zIndex: 5
-          }}
-        >
+        {/* Admin Delete Action */}
+        {isAdmin && (
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleFavorite(product.id);
-            }}
-            className="glass-panel"
+            onClick={handleDelete}
             style={{
-              width: '30px',
-              height: '30px',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              position: 'absolute',
+              bottom: '0.5rem',
+              right: '0.5rem',
+              background: '#dc2626',
+              color: '#fff',
               border: 'none',
+              borderRadius: 'var(--radius-xs)',
+              padding: '0.35rem',
               cursor: 'pointer',
-              color: isFav ? 'var(--accent-primary)' : '#fff',
-              background: 'rgba(0,0,0,0.5)'
+              zIndex: 6
             }}
-            title={isFav ? 'Remove from favorites' : 'Save to wishlist'}
+            title="Delete Listing"
           >
-            <Heart size={14} color="currentColor" fill={isFav ? 'currentColor' : 'none'} />
+            <Trash2 size={13} />
           </button>
-
-          {isAdmin && (
-            <>
-              <button
-                onClick={handleEdit}
-                className="glass-panel"
-                style={{
-                  width: '30px',
-                  height: '30px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: '#fff',
-                  background: 'rgba(0,0,0,0.65)'
-                }}
-                title="Edit Listing"
-              >
-                <Edit3 size={12} color="#fff" />
-              </button>
-
-              <button
-                onClick={handleDelete}
-                className="glass-panel"
-                style={{
-                  width: '30px',
-                  height: '30px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: '#fff',
-                  background: 'rgba(220, 38, 38, 0.8)'
-                }}
-                title="Delete Listing"
-              >
-                <Trash2 size={12} color="#fff" />
-              </button>
-            </>
-          )}
-        </div>
-
-        {/* Bottom Game Label */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '0.5rem',
-            left: '0.65rem',
-            right: '0.65rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            color: '#fff',
-            fontSize: '0.72rem'
-          }}
-        >
-          <span style={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#ffffff' }}>
-            {product.gameName}
-          </span>
-          <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.68rem' }}>
-            {product.region?.split('(')[0] || 'Global'}
-          </span>
-        </div>
+        )}
       </div>
 
-      {/* Product Content Body */}
-      <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+      {/* Card Content: Streamlined description and price only */}
+      <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
         
-        <h3
-          onClick={() => setActiveDetailProduct(product)}
-          style={{
-            fontSize: '0.92rem',
-            fontWeight: 600,
-            lineHeight: 1.35,
-            marginBottom: '0.6rem',
+        {/* Vendor attribution - NO ROLES visible to clients */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.4rem', fontSize: '0.75rem' }}>
+          <span style={{ color: 'var(--text-muted)' }}>
+            Posted by: <strong style={{ color: '#0066ff' }}>{product.vendorName}</strong>
+          </span>
+          <span style={{ color: '#059669', fontWeight: 600, fontSize: '0.7rem' }}>
+            Verified
+          </span>
+        </div>
+
+        {/* Title */}
+        <h3 
+          style={{ 
+            fontSize: '0.96rem', 
+            fontWeight: 800, 
+            lineHeight: 1.35, 
+            color: 'var(--text-primary)', 
+            marginBottom: '0.4rem',
             cursor: 'pointer',
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-            height: '2.5rem'
+            overflow: 'hidden'
           }}
-          title={product.title}
+          onClick={() => navigateTo(isCurrency ? 'currency' : 'product-detail', product)}
         >
           {product.title}
         </h3>
 
-        {/* Specs Summary */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', marginBottom: '0.85rem', minHeight: '40px' }}>
-          {isCurrency ? (
-            <>
-              <span className="glass-badge" style={{ fontSize: '0.68rem' }}>
-                <Coins size={10} color="currentColor" /> {product.packages?.length || 4} Packages
-              </span>
-              <span className="glass-badge" style={{ fontSize: '0.68rem' }}>
-                Direct Top-Up
-              </span>
-            </>
-          ) : (
-            <>
-              {product.specs?.rank && (
-                <span className="glass-badge" style={{ fontSize: '0.68rem' }}>
-                  {product.specs.rank}
-                </span>
-              )}
-              {product.specs?.skinsCount && (
-                <span className="glass-badge" style={{ fontSize: '0.68rem' }}>
-                  {product.specs.skinsCount}
-                </span>
-              )}
-              {product.specs?.level && (
-                <span className="glass-badge" style={{ fontSize: '0.68rem' }}>
-                  Lvl {product.specs.level}
-                </span>
-              )}
-            </>
-          )}
-        </div>
+        {/* Description: streamlined strictly as requested */}
+        <p 
+          style={{ 
+            fontSize: '0.82rem', 
+            color: 'var(--text-secondary)', 
+            lineHeight: 1.45, 
+            marginBottom: '0.85rem',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden'
+          }}
+        >
+          {product.description || product.caption}
+        </p>
 
-        {/* Footer: Multi-Currency Price & WhatsApp Action */}
-        <div
-          style={{
-            marginTop: 'auto',
-            paddingTop: '0.65rem',
-            borderTop: '1px solid var(--glass-border-subtle)',
-            display: 'flex',
-            alignItems: 'center',
+        {/* Price & Action Row */}
+        <div 
+          style={{ 
+            marginTop: 'auto', 
+            paddingTop: '0.65rem', 
+            borderTop: '1px solid var(--glass-border-subtle)', 
+            display: 'flex', 
+            alignItems: 'center', 
             justifyContent: 'space-between',
-            gap: '0.5rem'
+            gap: '0.5rem',
+            flexWrap: 'wrap'
           }}
         >
           <div>
-            <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', display: 'block' }}>
-              {isCurrency ? 'From' : 'Price'}
+            <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', display: 'block' }}>Price</span>
+            <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0066ff', fontFamily: 'var(--font-mono)' }}>
+              {formatPrice(product.price, currency)}
             </span>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.3rem' }}>
-              <span style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--accent-primary)', fontFamily: 'var(--font-heading)' }}>
-                {formatPrice(product.price, currency)}
-              </span>
-            </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
             <button
-              onClick={() => setActiveDetailProduct(product)}
-              className="glass-panel"
-              style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: 'var(--radius-xs)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                color: 'var(--text-primary)'
-              }}
-              title="Inspect details"
+              onClick={() => addToCart(product)}
+              className="glass-btn glass-btn-primary"
+              style={{ padding: '0.45rem 0.8rem', fontSize: '0.82rem' }}
+              title="Add to Cart"
             >
-              <Eye size={14} color="currentColor" />
+              <ShoppingCart size={13} />
+              <span>Add to Cart</span>
             </button>
 
-            <GlassButton
-              variant="whatsapp"
-              size="sm"
-              icon={MessageSquare}
-              onClick={() => openCheckout(product)}
+            <button
+              onClick={() => navigateTo(isCurrency ? 'currency' : 'product-detail', product)}
+              className="glass-btn glass-btn-secondary"
+              style={{ padding: '0.45rem 0.6rem', fontSize: '0.82rem' }}
+              title="View Details"
             >
-              Buy
-            </GlassButton>
+              <Eye size={13} />
+            </button>
           </div>
-
         </div>
 
       </div>

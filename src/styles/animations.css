@@ -1,4 +1,4 @@
-/* Clean Transitions & Sliding Movement Keyframes */
+/* Clean Transitions & Interactive Movement Keyframes */
 
 @keyframes fadeIn {
   from {
@@ -20,34 +20,12 @@
   }
 }
 
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.4);
   }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
+  50% {
+    box-shadow: 0 0 0 6px rgba(0, 102, 255, 0);
   }
 }
 
@@ -59,29 +37,83 @@
   animation: fadeUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.animate-slide-right {
-  animation: slideInRight 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+/* Lively Micro-interactions */
+.product-card-hover {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.animate-slide-left {
-  animation: slideInLeft 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.product-card-hover:hover {
+  transform: translateY(-3px);
+  border-color: #0066ff !important;
+  box-shadow: 0 8px 24px rgba(0, 102, 255, 0.12) !important;
 }
 
-/* Skeleton Loading Shimmer */
+.product-card-hover:hover .product-card-img {
+  transform: scale(1.04);
+}
+
+.glass-btn:active {
+  transform: scale(0.97);
+}
+
+/* Linear Accounts Responsive View */
+@media (max-width: 640px) {
+  .accounts-linear-container .glass-card {
+    flex-direction: column !important;
+  }
+  
+  .accounts-linear-container .glass-card > div:first-child {
+    width: 100% !important;
+    height: 180px !important;
+    min-width: 100% !important;
+  }
+}
+
+/* Skeleton Loading Shimmer in Clean White & Slate */
+@keyframes skeletonShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 .skeleton-box {
-  background: linear-gradient(
-    90deg,
-    var(--glass-bg) 25%,
-    var(--glass-bg-hover) 50%,
-    var(--glass-bg) 75%
-  );
+  background: linear-gradient(90deg, #e2e8f0 25%, #f8fafc 50%, #e2e8f0 75%);
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: var(--radius-sm);
+  animation: skeletonShimmer 1.5s infinite ease-in-out;
+  border-radius: var(--radius-xs);
 }
 
-.serif-subheading {
-  font-family: var(--font-serif);
-  font-style: italic;
-  letter-spacing: 0.01em;
+/* Interactive Login Showcase Card Hover Effects */
+.login-feature-card {
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.login-feature-card:hover {
+  transform: translateX(8px);
+  background: rgba(255, 255, 255, 0.16) !important;
+  border-color: rgba(147, 197, 253, 0.7) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+}
+
+.login-feature-card .login-feature-icon {
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.login-feature-card:hover .login-feature-icon {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.28) !important;
+}
+
+.login-feature-card .login-feature-arrow {
+  transition: opacity 0.2s ease, transform 0.25s ease;
+  opacity: 0.5;
+}
+
+.login-feature-card:hover .login-feature-arrow {
+  opacity: 1 !important;
+  transform: translateX(4px);
 }

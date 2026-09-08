@@ -1,8 +1,9 @@
-/* Clean Liquid Glass Theme Variables - Refined Typography & Subtle Accents */
+/* WRG Store - Clean White & Royal Blue Design System
+   High legibility, sharp contrast, professional SaaS & gaming marketplace aesthetic */
 :root {
   --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-serif: 'Neuton', Georgia, 'Times New Roman', serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, Menlo, monospace;
   
   --radius-xs: 6px;
   --radius-sm: 8px;
@@ -13,114 +14,116 @@
   
   --transition-fast: 0.15s ease;
   --transition-normal: 0.2s ease;
-  --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* =========================================================
-   DARK MODE (Refined Dark Obsidian & Subtle Crimson Accent)
+   DEFAULT / LIGHT MODE (Crisp Porcelain White & Electric/Royal Blue)
    ========================================================= */
-[data-theme="dark"],
-:root:not([data-theme="light"]) {
-  --bg-main: #0a0b0e;
-  --bg-secondary: #12131a;
-  --bg-tertiary: #191b24;
-  
-  --glass-bg: rgba(18, 20, 29, 0.72);
-  --glass-bg-hover: rgba(26, 29, 42, 0.82);
-  --glass-bg-active: rgba(32, 36, 52, 0.9);
-  --glass-card: rgba(16, 18, 26, 0.68);
-  --glass-modal: rgba(14, 16, 24, 0.94);
-  --glass-nav: rgba(10, 11, 14, 0.88);
-  
-  --glass-border: rgba(229, 56, 59, 0.22);
-  --glass-border-subtle: rgba(255, 255, 255, 0.07);
-  --glass-border-hover: rgba(229, 56, 59, 0.45);
-  
-  --accent-primary: #e5383b;
-  --accent-secondary: #f43f5e;
-  --accent-gradient: linear-gradient(135deg, #e5383b 0%, #ba181b 100%);
-  --accent-gradient-hover: linear-gradient(135deg, #f43f5e 0%, #d90429 100%);
-  --accent-gradient-soft: rgba(229, 56, 59, 0.08);
-  
-  --accent-glow: none;
-  --accent-glow-subtle: none;
-  
-  --emerald-accent: #10b981;
-  --amber-accent: #f59e0b;
-  --cyan-accent: #06b6d4;
-  
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --text-inverted: #0b0c10;
-  
-  --glass-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
-  --glass-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.5);
-  --glass-shadow-modal: 0 16px 40px rgba(0, 0, 0, 0.65);
-  
-  --orb-1: rgba(229, 56, 59, 0.07);
-  --orb-2: rgba(186, 24, 27, 0.05);
-  --orb-3: rgba(59, 130, 246, 0.03);
-  
-  --input-bg: rgba(14, 16, 24, 0.75);
-  --input-border: rgba(255, 255, 255, 0.1);
-  --input-border-focus: #e5383b;
-  
-  --badge-bg: rgba(229, 56, 59, 0.1);
-  --badge-text: #f87171;
-  --badge-border: rgba(229, 56, 59, 0.25);
-}
-
-/* =========================================================
-   LIGHT MODE (Clean Porcelain White & Crimson Accent)
-   ========================================================= */
+:root,
 [data-theme="light"] {
-  --bg-main: #f8f9fa;
+  --bg-main: #f8fafc;
   --bg-secondary: #ffffff;
-  --bg-tertiary: #edf0f5;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: #ffffff;
   
-  --glass-bg: rgba(255, 255, 255, 0.82);
-  --glass-bg-hover: rgba(255, 255, 255, 0.95);
-  --glass-bg-active: #ffffff;
-  --glass-card: rgba(255, 255, 255, 0.75);
-  --glass-modal: rgba(255, 255, 255, 0.96);
-  --glass-nav: rgba(255, 255, 255, 0.9);
+  --glass-bg: rgba(255, 255, 255, 0.95);
+  --glass-bg-hover: #ffffff;
+  --glass-bg-active: #f1f5f9;
+  --glass-card: #ffffff;
+  --glass-modal: #ffffff;
+  --glass-nav: rgba(255, 255, 255, 0.96);
   
-  --glass-border: rgba(186, 24, 27, 0.18);
-  --glass-border-subtle: rgba(15, 23, 42, 0.08);
-  --glass-border-hover: rgba(186, 24, 27, 0.35);
+  --glass-border: #cbd5e1;
+  --glass-border-subtle: #e2e8f0;
+  --glass-border-hover: #0066ff;
   
-  --accent-primary: #ba181b;
-  --accent-secondary: #e5383b;
-  --accent-gradient: linear-gradient(135deg, #ba181b 0%, #a4161a 100%);
-  --accent-gradient-hover: linear-gradient(135deg, #d90429 0%, #ba181b 100%);
-  --accent-gradient-soft: rgba(186, 24, 27, 0.05);
-  
-  --accent-glow: none;
-  --accent-glow-subtle: none;
+  --accent-primary: #0066ff;
+  --accent-secondary: #0052cc;
+  --accent-hover: #0047b3;
+  --accent-gradient: #0066ff;
+  --accent-gradient-hover: #0052cc;
+  --accent-gradient-soft: rgba(0, 102, 255, 0.06);
+  --accent-light: #eff6ff;
   
   --emerald-accent: #059669;
   --amber-accent: #d97706;
-  --cyan-accent: #0891b2;
+  --cyan-accent: #0284c7;
   
-  --text-primary: #111827;
-  --text-secondary: #4b5563;
-  --text-muted: #6b7280;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
   --text-inverted: #ffffff;
   
-  --glass-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
-  --glass-shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.09);
-  --glass-shadow-modal: 0 16px 36px rgba(15, 23, 42, 0.14);
+  --glass-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --glass-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+  --glass-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  --glass-shadow-modal: 0 20px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.06);
   
-  --orb-1: rgba(186, 24, 27, 0.05);
-  --orb-2: rgba(229, 56, 59, 0.04);
-  --orb-3: rgba(59, 130, 246, 0.02);
+  --orb-1: transparent;
+  --orb-2: transparent;
+  --orb-3: transparent;
   
-  --input-bg: rgba(255, 255, 255, 0.9);
-  --input-border: rgba(15, 23, 42, 0.12);
-  --input-border-focus: #ba181b;
+  --input-bg: #ffffff;
+  --input-border: #cbd5e1;
+  --input-border-focus: #0066ff;
   
-  --badge-bg: rgba(186, 24, 27, 0.08);
-  --badge-text: #991b1b;
-  --badge-border: rgba(186, 24, 27, 0.2);
+  --badge-bg: #eff6ff;
+  --badge-text: #0052cc;
+  --badge-border: #bfdbfe;
+}
+
+/* =========================================================
+   DARK MODE (Deep Midnight Navy & Vivid Blue)
+   ========================================================= */
+[data-theme="dark"] {
+  --bg-main: #0a1128;
+  --bg-secondary: #0f1c3f;
+  --bg-tertiary: #162454;
+  --bg-card: #0f1c3f;
+  
+  --glass-bg: rgba(15, 28, 63, 0.95);
+  --glass-bg-hover: #162454;
+  --glass-bg-active: #1c2e68;
+  --glass-card: #0f1c3f;
+  --glass-modal: #0c1735;
+  --glass-nav: rgba(10, 17, 40, 0.95);
+  
+  --glass-border: #1e3a8a;
+  --glass-border-subtle: #172554;
+  --glass-border-hover: #3b82f6;
+  
+  --accent-primary: #3b82f6;
+  --accent-secondary: #60a5fa;
+  --accent-hover: #2563eb;
+  --accent-gradient: #3b82f6;
+  --accent-gradient-hover: #2563eb;
+  --accent-gradient-soft: rgba(59, 130, 246, 0.12);
+  --accent-light: rgba(59, 130, 246, 0.15);
+  
+  --emerald-accent: #10b981;
+  --amber-accent: #f59e0b;
+  --cyan-accent: #38bdf8;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-inverted: #0a1128;
+  
+  --glass-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  --glass-shadow-md: 0 8px 20px rgba(0, 0, 0, 0.45);
+  --glass-shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.55);
+  --glass-shadow-modal: 0 24px 50px rgba(0, 0, 0, 0.7);
+  
+  --orb-1: transparent;
+  --orb-2: transparent;
+  --orb-3: transparent;
+  
+  --input-bg: #0b1531;
+  --input-border: #1e3a8a;
+  --input-border-focus: #3b82f6;
+  
+  --badge-bg: rgba(59, 130, 246, 0.15);
+  --badge-text: #93c5fd;
+  --badge-border: rgba(59, 130, 246, 0.35);
 }
